@@ -10,7 +10,7 @@ namespace WebApplicationEmpty.Controllers
     {
         public IActionResult Index()
         {
-            return Content("Test");
+            return View();
         }
 
         //ACTION METOD, är sin egna end-point.

@@ -26,7 +26,7 @@ app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=snippet}/{action=Welcome}"); // = default values.
+    pattern: "{controller=birthday}/{action=index}"); // = default values.
 
 
 

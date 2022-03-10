@@ -1,0 +1,44 @@
+﻿@using System.Diagnostics
+@using WebApplicationEmpty.Models;
+
+@{
+    //List of birthdays
+    var birthdays = new List<Birthday>()
+    {
+        new Birthday {Person = "Billie", BornIn = new DateTime(2021, 10, 23)},
+        new Birthday {Person = "Maria", BornIn = new DateTime(1988, 11 , 4)},
+        new Birthday {Person = "Johan", BornIn = new DateTime(1989, 2 , 20)},
+        new Birthday {Person = "Emil", BornIn = new DateTime(1989, 3 , 14)},
+        new Birthday {Person = "Jon", BornIn = new DateTime(1989, 5 , 3)}
+
+    };
+
+    //Today's date variable
+    var today = DateTime.Today;
+
+    //Get birthdays within two months from today.
+    birthdays.Where(birthday => (birthday.ThisYear - today).Days <= 61);
+
+    //Sort by birthday closest to today first
+    birthdays.Sort((birthdayA, birthdayB) => DateTime.Compare(birthdayA.ThisYear, birthdayB.ThisYear));
+
+    //select only the closest birthday
+    var birthday = birthdays.FirstOrDefault();
+
+
+  
+    
+}
+
+
+<div>
+    <h1>Todays date: @today.ToString("D")</h1>
+</div>
+
+<div>
+    <h3>UPCOMING BIRTHDAYS</h3>
+    <ol>
+        <li>@birthday.Person fyller år den @birthday.ThisYear.ToString("D")</li>
+
+    </ol>
+</div>
