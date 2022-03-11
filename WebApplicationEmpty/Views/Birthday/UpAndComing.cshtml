@@ -43,7 +43,7 @@
     {
         foreach (var birthday in birthdaysWithinTwoMonths)
         {
-            <p>@birthday.Person birthday is on @birthday.ThisYear.ToString("D")               that's in @((birthday.ThisYear - today).Days) days</p>
+            printBirthdays(birthday);
         }
         
     }
@@ -52,3 +52,13 @@
         <p>There are no birthdays within the next two months</p>
     }
 </div>
+
+@{
+    void printBirthdays(Birthday birthday)
+    {
+        <p>
+         @birthday.Person birthday is on @birthday.ThisYear.ToString("D")
+        that's in @((birthday.ThisYear - today).Days) days </p>;
+
+    }
+}
