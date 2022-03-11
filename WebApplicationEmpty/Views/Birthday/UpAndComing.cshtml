@@ -13,21 +13,23 @@
 
     };
 
-    //Today's date variable
-    var today = DateTime.Today;
-
-    //Get birthdays within two months from today.
-    birthdays.Where(birthday => (birthday.ThisYear - today).Days <= 61);
+    
 
     //Sort by birthday closest to today first
     birthdays.Sort((birthdayA, birthdayB) => DateTime.Compare(birthdayA.ThisYear, birthdayB.ThisYear));
 
-    //select only the closest birthday
-    var birthday = birthdays.FirstOrDefault();
+    //Today's date variable
+    var today = DateTime.Today;
 
+    //Get birthdays within two months from today.
+    var birthdaysWithinTwoMonths = birthdays
+        .Where(birthday => (birthday.ThisYear - today).Days <= 61 && (birthday.ThisYear - today).Days >= -1)
+        .ToList();
 
-  
     
+    //select only the closest birthday
+    //var birthday = birthdays.FirstOrDefault();
+
 }
 
 
@@ -37,8 +39,16 @@
 
 <div>
     <h3>UPCOMING BIRTHDAYS</h3>
-    <ol>
-        <li>@birthday.Person fyller år den @birthday.ThisYear.ToString("D")</li>
-
-    </ol>
+    @if (birthdaysWithinTwoMonths.Count > 0)
+    {
+        foreach (var birthday in birthdaysWithinTwoMonths)
+        {
+            <p>@birthday.Person birthday is on @birthday.ThisYear.ToString("D")               that's in @((birthday.ThisYear - today).Days) days</p>
+        }
+        
+    }
+    else
+    {
+        <p>There are no birthdays within the next two months</p>
+    }
 </div>
