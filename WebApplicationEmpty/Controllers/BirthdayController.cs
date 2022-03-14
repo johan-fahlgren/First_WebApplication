@@ -4,9 +4,15 @@ namespace WebApplicationEmpty.Controllers
 {
     public class BirthdayController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(DateTime? date)
         {
-            return View("UpAndComing");
+
+            if (date == null)
+            {
+                date = DateTime.Today;
+            }
+
+            return View("UpAndComing", date.Value);
         }
     }
 }

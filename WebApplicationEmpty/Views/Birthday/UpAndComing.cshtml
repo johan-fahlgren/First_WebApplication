@@ -1,5 +1,6 @@
 ﻿@using System.Diagnostics
 @using WebApplicationEmpty.Models;
+@model DateTime
 
 @{
     //List of birthdays
@@ -13,17 +14,19 @@
 
     };
 
+    //Today's date variable
+    var today = Model;
     
 
     //Sort by birthday closest to today first
-    birthdays.Sort((birthdayA, birthdayB) => DateTime.Compare(birthdayA.ThisYear, birthdayB.ThisYear));
+    birthdays.Sort((birthdayA, birthdayB) => DateTime.Compare(birthdayA.ThisYear(today), birthdayB.ThisYear(today)));
 
-    //Today's date variable
-    var today = DateTime.Today;
+   
 
-    //Get birthdays within two months from today.
+    //Get birthdays within two months from today
     var birthdaysWithinTwoMonths = birthdays
-        .Where(birthday => (birthday.ThisYear - today).Days <= 61 && (birthday.ThisYear - today).Days >= -1)
+        .Where(birthday => (birthday.ThisYear(today) - today).Days <= 61)
+        .Where(birthday => (birthday.ThisYear(today) - today).Days >= 0)
         .ToList();
 
     
@@ -57,8 +60,9 @@
     void printBirthdays(Birthday birthday)
     {
         <p>
-         @birthday.Person birthday is on @birthday.ThisYear.ToString("D")
-        that's in @((birthday.ThisYear - today).Days) days </p>;
+         @birthday.Person birthday is on 
+             @birthday.ThisYear(today).ToString("D") that's in 
+                 @((birthday.ThisYear(today) - today).Days) days </p>;
 
     }
 }
