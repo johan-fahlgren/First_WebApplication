@@ -1,0 +1,67 @@
+﻿@using System.Globalization
+@using WebApplicationEmpty.Models
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@model int
+
+@{
+    var month = Model;
+
+    var monthNames = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames
+        .Take(12)
+        .ToList();
+
+    //List of birthdays
+    var birthdays = new List<Birthday>()
+    {
+        new Birthday {Person = "Billie", BornIn = new DateTime(2021, 10, 23)},
+        new Birthday {Person = "Maria", BornIn = new DateTime(1988, 11 , 4)},
+        new Birthday {Person = "Johan", BornIn = new DateTime(1989, 2 , 20)},
+        new Birthday {Person = "Emil", BornIn = new DateTime(1989, 3 , 14)},
+        new Birthday {Person = "Jon", BornIn = new DateTime(1989, 5 , 3)}
+
+    };
+}
+
+@if (month == 0)
+{
+    <ul>
+        @for (int i = 0; i < monthNames.Count; i++)
+        {
+            var monthName = monthNames[i];
+            <li>
+                <a
+                    asp-controller='Birthday'
+                    asp-action='Overview'
+                    asp-route-month='@(i + 1)'>
+                    @monthName
+                </a>
+            </li>
+        }
+    </ul>
+}
+else //show all birthdays this month
+{
+    var birthdaysInGivenMonth = 
+        birthdays.Where(birthday => birthday.BornIn.Month == month);
+
+    <ul>
+        @foreach (var birthday in birthdaysInGivenMonth)
+        {
+            <li>
+                <p>
+                    @birthday.Person birthday is @birthday.BornIn.ToString("M")
+                </p>
+            </li>
+        }
+    </ul>
+    <a
+        asp-controller='Birthday'
+        asp-action='Overview'
+        asp-route-month=''>
+        Back to overview
+    </a>
+
+    
+}

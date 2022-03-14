@@ -14,5 +14,19 @@ namespace WebApplicationEmpty.Controllers
 
             return View("UpAndComing", date.Value);
         }
+
+        public IActionResult Overview(int month = 0)
+        {
+            if (0 <= month && month <= 12)
+            {
+                return View(month);
+            }
+            else
+            {
+                return NotFound("404");
+            }
+
+        }
+
     }
 }

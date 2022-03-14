@@ -1,5 +1,6 @@
 ﻿@using System.Diagnostics
 @using WebApplicationEmpty.Models;
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @model DateTime
 
 @{
@@ -46,7 +47,7 @@
     {
         foreach (var birthday in birthdaysWithinTwoMonths)
         {
-            printBirthdays(birthday);
+            printBirthdays(birthday, today);
         }
         
     }
@@ -56,13 +57,16 @@
     }
 </div>
 
-@{
-    void printBirthdays(Birthday birthday)
+@functions
+{
+ 
+    void printBirthdays(Birthday birthday, DateTime today)
     {
         <p>
          @birthday.Person birthday is on 
-             @birthday.ThisYear(today).ToString("D") that's in 
-                 @((birthday.ThisYear(today) - today).Days) days </p>;
+         @birthday.ThisYear(today).ToString("D") 
+         that's in @((birthday.ThisYear(today) - today).Days) days 
+         </p>;
 
     }
 }
