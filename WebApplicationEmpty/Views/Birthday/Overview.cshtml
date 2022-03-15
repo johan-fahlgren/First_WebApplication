@@ -1,67 +1,93 @@
 ﻿@using System.Globalization
-@using WebApplicationEmpty.Models
 
-@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
-@model int
+@model int?
 
 @{
-    var month = Model;
-
-    var monthNames = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames
-        .Take(12)
-        .ToList();
-
-    //List of birthdays
     var birthdays = new List<Birthday>()
     {
-        new Birthday {Person = "Billie", BornIn = new DateTime(2021, 10, 23)},
-        new Birthday {Person = "Maria", BornIn = new DateTime(1988, 11 , 4)},
-        new Birthday {Person = "Johan", BornIn = new DateTime(1989, 2 , 20)},
-        new Birthday {Person = "Emil", BornIn = new DateTime(1989, 3 , 14)},
-        new Birthday {Person = "Jon", BornIn = new DateTime(1989, 5 , 3)}
-
+        new Birthday
+        {
+            BornIn = new DateTime(2021, 10, 23),
+            Person = "Billie",
+        },
+        new Birthday
+        {
+            BornIn = new DateTime(1988, 11, 4),
+            Person = "Maria",
+        },
+        new Birthday
+        {
+            BornIn = new DateTime(1989, 2, 20),
+            Person = "Johan",
+        },
+        new Birthday
+        {
+            BornIn = new DateTime(1989, 5, 3),
+            Person = "Jon",
+        },
+        new Birthday
+        {
+            BornIn = new DateTime(1989, 3, 14),
+            Person = "Emil",
+        },
     };
+
+    var months = CultureInfo.CurrentCulture.DateTimeFormat.MonthNames.Take(12).ToList();
 }
 
-@if (month == 0)
+@if (Model == null)
 {
     <ul>
-        @for (int i = 0; i < monthNames.Count; i++)
+    @for(var index = 0; index < 12; index++)
+    {
+        var month = index + 1; 
+        var monthName = months[index];
+
+        var anyBirthdayThisMonth = birthdays.Any(birthday => birthday.BornIn.Month == month);
+        
+        <li>
+        @if (anyBirthdayThisMonth)
         {
-            var monthName = monthNames[i];
+            <a asp-action="Overview" asp-route-month="@month">
+                @monthName
+            </a>
+        }
+        else
+        {
+            @monthName
+        }
+        </li>
+    }
+    </ul>
+}
+else
+{
+    var month = Model.Value; 
+    var monthName = months[Model.Value-1];
+
+    var birthdaysThisMonth = birthdays.Where(birthday => birthday.BornIn.Month == month);
+
+    <h2>@monthName</h2>
+    <ul>
+        @foreach(var birthday in birthdaysThisMonth)
+        {
             <li>
-                <a
-                    asp-controller='Birthday'
-                    asp-action='Overview'
-                    asp-route-month='@(i + 1)'>
-                    @monthName
-                </a>
+                @birthday.Person fyller år den @birthday.BornIn.ToString("dd'/'MM") 
             </li>
         }
     </ul>
-}
-else //show all birthdays this month
-{
-    var birthdaysInGivenMonth = 
-        birthdays.Where(birthday => birthday.BornIn.Month == month);
-
-    <ul>
-        @foreach (var birthday in birthdaysInGivenMonth)
-        {
-            <li>
-                <p>
-                    @birthday.Person birthday is @birthday.BornIn.ToString("M")
-                </p>
-            </li>
-        }
-    </ul>
-    <a
-        asp-controller='Birthday'
-        asp-action='Overview'
-        asp-route-month=''>
-        Back to overview
+    <a asp-action="Overview" asp-route-month="">
+        Till toppen av översikten
     </a>
+}
 
-    
+@section Overview_style
+{
+    <style>
+
+        li {
+            font-weight: bold;
+        }
+
+    </style>
 }

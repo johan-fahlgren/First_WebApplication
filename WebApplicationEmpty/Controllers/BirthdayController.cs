@@ -7,25 +7,21 @@ namespace WebApplicationEmpty.Controllers
         public IActionResult Index(DateTime? date)
         {
 
-            if (date == null)
-            {
-                date = DateTime.Today;
-            }
-
-            return View("UpAndComing", date.Value);
+            return RedirectToAction("UpAndComing",
+                new
+                {
+                    date = DateTime.Today.ToString("yyyy-MM-dd")
+                });
         }
 
-        public IActionResult Overview(int month = 0)
+        public IActionResult UpAndComing(DateTime date)
         {
-            if (0 <= month && month <= 12)
-            {
-                return View(month);
-            }
-            else
-            {
-                return NotFound("404");
-            }
+            return View(date);
+        }
 
+        public IActionResult Overview(int? month)
+        {
+            return View(month);
         }
 
     }

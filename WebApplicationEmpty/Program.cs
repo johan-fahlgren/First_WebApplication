@@ -36,7 +36,7 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=snippet}/{action=index}"); // = default values.
+    pattern: "{controller=birthday}/{action=index}"); // = default values.
 
 
 
